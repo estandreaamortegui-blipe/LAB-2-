@@ -376,7 +376,7 @@ La Transformada de Fourier ofrece una ventaja al contenido frecuencial de las se
 - La correlación cruzada demostró ser eficaz para cuantificar la similitud entre señales en función del desplazamiento temporal, evidenciado en el análisis del seno y coseno desfasados 90°, donde el máximo de correlación no ocurre en el desplazamiento cero sino cuando ambas señales se alinean mejor.
 - El análisis en tiempo y frecuencia de la señal EOG permitió caracterizar su comportamiento estadístico y espectral, obteniendo parámetros descriptivos como media, mediana, desviación estándar, frecuencia media y densidad espectral de potencia. Estos indicadores proporcionan una visión integral de la señal, revelando que las señales biomédicas presentan una distribución de energía en un rango continuo de frecuencias y una variabilidad significativa, lo que confirma su naturaleza aleatoria y aperiódica.
 - La Transformada de Fourier demostró su utilidad para identificar el contenido frecuencial de la señal biomédica, permitiendo visualizar cómo se distribuye la energía en las diferentes bandas de frecuencia. Sin embargo, su aplicación en tiempo real presenta limitaciones importantes como la necesidad de trabajar con bloques completos de datos.
-- 
+
 ---
 ### Referencias 
  A. V. Oppenheim, A. S. Willsky y S. H. Nawab, Signals and systems. Upper
