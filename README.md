@@ -50,6 +50,11 @@ Primero se importan las librerías necesarias para la lectura y el procesamiento
 
 Estas herramientas son fundamentales para el análisis de señales biomédicas en Python.
 
+<p align="center">
+<img width="1171" height="1600" alt="image" src="https://github.com/user-attachments/assets/ee68f36e-d8f0-44db-b6f9-e58095695041" />
+</p>
+<p align="center">
+  <em>Diagrama de flujo del codigo</em></p
 ---
 
 ### Parte A
@@ -65,6 +70,37 @@ y_python = np.convolve(x, h, mode='full')
 ```
 Esta permite visualizar como el sistema representado por h(n) modifica la señal de entrada x(n). 
 Tambien se realuzo la convolucion a mano donde se utilizo el metodo mas sencillo por medio de tablas, como se muestra en la imagen:
+
+<p align="center">
+<img width="899" height="730" alt="image" src="https://github.com/user-attachments/assets/a67f41a6-e195-4da8-a9e8-eac907ba972d" />
+
+</p>
+<p align="center">
+  <em>CGráfica X(n)</em></p
+
+
+
+<p align="center">
+<img width="900" height="725" alt="image" src="https://github.com/user-attachments/assets/85fc7918-23df-4cf3-a9f4-641533ca3891" />
+</p>
+<p align="center">
+  <em>Gráfica H(n)</em></p
+
+
+
+  <p align="center">
+<img width="725" height="889" alt="image" src="https://github.com/user-attachments/assets/82706218-1426-4bb1-ad1f-ff9afba33a46" />
+</p>
+<p align="center">
+  <em>Convolución a mano</em></p
+
+
+
+  <p align="center">
+<img width="1100" height="959" alt="image" src="https://github.com/user-attachments/assets/b18cffd4-eb49-4088-ba8c-4c13b52a09ff" />
+</p>
+<p align="center">
+  <em>Gráfica y(n)</em></p
 
 
 Para verificar el resultado obtenido manualmente, se implemento el cálculo d la convolución en Python. En este caso se uso la función * `numpy.convolve()`, y esta también nos permitió observar gráficamente el comportamiento de las señales.
