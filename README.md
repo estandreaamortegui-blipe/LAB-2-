@@ -55,6 +55,8 @@ Estas herramientas son fundamentales para el análisis de señales biomédicas e
 </p>
 <p align="center">
   <em>Diagrama de flujo del codigo</em></p
+
+
 ---
 
 ### Parte A
