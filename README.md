@@ -64,7 +64,8 @@ La convolución entre ambas señales se calcula mediante:
 y_python = np.convolve(x, h, mode='full')
 ```
 Esta permite visualizar como el sistema representado por h(n) modifica la señal de entrada x(n). 
-Tambien se realuzo la convolucion a mano donde se utilizo el metodo mas sencillo por medio de tablas, como se muestra en la imagen: 
+Tambien se realuzo la convolucion a mano donde se utilizo el metodo mas sencillo por medio de tablas, como se muestra en la imagen:
+
 
 Para verificar el resultado obtenido manualmente, se implemento el cálculo d la convolución en Python. En este caso se uso la función * `numpy.convolve()`, y esta también nos permitió observar gráficamente el comportamiento de las señales.
 
@@ -86,6 +87,7 @@ A partir de estas gráficas se puede observar cómo la señal de salida y(n) cor
 <p align="center">
   <em>Gráfica h(n)</em>
 </p>
+
 ---
 
 ### Resultado parte A
@@ -100,281 +102,263 @@ La convolución representa el comportamiento de un sistema lineal e invariante e
 
 ---
 
-### Cálculo manual de los estadísticos descriptivos
-
-En esta etapa se implementan manualmente las fórmulas matemáticas de los principales estadísticos descriptivos:
-
-* **Media**: promedio de los valores de la señal, representa el valor central.
-
-```python
-suma = 0
-for i in range(N):
-    suma += senal_cortada[i]
-```
-
-* **Desviación estándar**: indica qué tan dispersos están los valores respecto a la media.
-* **Coeficiente de variación**: relaciona la desviación estándar con la media y permite evaluar la variabilidad relativa.
-* **Asimetría (skewness)**: muestra si la distribución de los valores está sesgada hacia la derecha o hacia la izquierda.
-* **Curtosis**: describe el grado de concentración o dispersión de los valores alrededor de la media.
-
-Realizar estos cálculos de forma manual ayuda a comprender mejor el significado matemático de cada parámetro y su relación con la forma de la señal.
-
----
-
-### Cálculo mediante funciones predefinidas
-
-Posteriormente, los mismos estadísticos se calculan usando funciones de `numpy` y `scipy.stats`. Este enfoque simplifica el código y mejora la eficiencia, además de servir para verificar que los resultados obtenidos manualmente son correctos.
-
-Al comparar ambos métodos, se observa coherencia en los resultados, lo que confirma la adecuada implementación de las fórmulas.
-
-
-```python
-media_lib = np.mean(senal_cortada)
-desv_lib = np.std(senal_cortada)
-
-```
-
-
----
-## Histograma Parte A
-
-Finalmente, se genera un histograma de la señal adquirida para analizar la distribución de sus amplitudes. Este gráfico permite identificar la dispersión de los datos y la posible presencia de valores atípicos asociados a ruido o interferencias.
-
-Se incluye una línea vertical que representa la media, facilitando la interpretación visual de la distribución estadística.
-<p align="center">
-  <img src="img2.png" width="700">
-</p>
-
-<p align="center">
-  <em>Histograma Parte A </em>
-</p>
-
----
-
 ### Parte B
 
-En esta parte del trabajo se realiza el análisis de una señal fisiológica adquirida experimentalmente mediante un sistema de adquisición de datos (DAQ). El objetivo principal es caracterizar estadísticamente una señal real, analizar su comportamiento temporal y probabilístico, y comparar estos resultados con los obtenidos a partir de la señal descargada desde la base de datos en la Parte A.
-
-las librerías necesarias para la adquisición, el procesamiento y la visualización de la señal, ademas de las ya utilizadas son:
-
-* `nidaqmx`: permite la comunicación con la tarjeta de adquisición de datos y la captura de señales analógicas.
-
-Esta herramienta permiten integrar la adquisición experimental con el procesamiento estadístico en Python.
-
----
-
-### Adquisición de la señal DAQ
-La adquisición de la señal se realizó mediante un código independiente desarrollado específicamente para la captura de datos utilizando una tarjeta DAQ. Este script externo se encargó de configurar los parámetros de adquisición, como la frecuencia de muestreo, la duración del registro y la selección del canal de entrada analógica.
-
-Como resultado del proceso de captura, se generó un archivo en formato TXT que contiene dos columnas: tiempo (s) y voltaje (V).
-
+En esta parte se analizan dos señales discretan generadas a partir de funciones trigonométricas. La primera señal está definida como:
 <p align="center">
-  <img src="Captura.png" width="700">
+  <em>x1​[nTs​]=cos(2π100nTs)</em>
+</p>
+y la segunda señal como:
+<p align="center">
+  <em>x2​[nTs​]=sin(2π100nTs​)</em>
+</p>
+
+Donde Ts= 1.25ms que corresponde al periodo de muestro y el índice n toma valores entre 0 y 9.
+
+Estas señales representan versiones discretizadas de una señal cosenoidal y una señal senoidal con la misma frecuenci. Debido a que el seno y el coseno estan desfasados 90°, se espera que exista un relacion entre ambas señales que puede analizarse mediante la correlación cruzada.
+
+Las figuras muestran la representación gráfica de las secuencias discretas X1(n) y X2(n), donde cada punto representa una muestra de la señal en el instante n.
+<p align="center">
+ <img width="836" height="637" alt="image" src="https://github.com/user-attachments/assets/49a10ebd-4217-49eb-827e-599c86e427ce" />
+</p>
+<p align="center">
+  <em>Gráfica X1(n)</em>
 </p>
 
 <p align="center">
-  <em>Diagrama de flujo Captura de datos </em>
+<img width="842" height="626" alt="image" src="https://github.com/user-attachments/assets/508e965d-9a36-4b0e-9012-5ea85759d969" />
 </p>
-
-El código principal del proyecto no realiza la adquisición directamente, sino que utiliza como entrada el archivo TXT generado por el script de captura. A partir de este archivo, se lleva a cabo el procesamiento y análisis.
-
+<p align="center">
+  <em>Gráfica X2(n)</em>
+</p>
+​
 ---
 
-### Extracción de parámetros temporales
+### Representación gráfica de correlación cruzada
 
-Con base en la frecuencia de muestreo utilizada durante la adquisición, se construye un vector de tiempo que asocia cada muestra con su instante correspondiente. Este vector permite representar correctamente la señal en el dominio temporal.
+La correlación cruzada mide el grado de similitud entre dos señales cuando una de ellas se desplaza en el tiempo.
 
----
-
-### Visualización de la señal
-
-El código grafica la señal adquirida en función del tiempo. Esta visualización permite verificar que la adquisición se haya realizado correctamente y observar características propias de una señal real, como la presencia de ruido, variaciones en la amplitud y posibles artefactos.
-
-La inspección visual es un paso clave antes de realizar el análisis estadístico.
+En la graica obtenida se representa el valor de la correlación para distintos desplazamientos positivos y negativos. Cada punto indica cuánto se parecen las señales cuando una de ellas se desplaza cierta cantidad de muestras respecto a la otra.
 
 <p align="center">
-  <img src="img3.png" width="700">
+<img width="830" height="626" alt="image" src="https://github.com/user-attachments/assets/e36494d2-6387-4e15-9fcc-a4741fdf3810" />
+</p>
+<p align="center">
+  <em>Gráfica de correlación entre X1(n) y X2(n)</em>
 </p>
 
-<p align="center">
-  <em> Señal ECG adquirida </em>
-</p>
+En la figura de correlación cruzada se observan valores positivos y negativos, lo cual indica que dependiendo del desplazamiento kas señales pueden estar en fase.
+
+El valor máximo de correlación indica el desplazamiento en el cual las señales representan mayor similitud.
 
 ---
 
-### Recorte de la señal
+### ¿En qué situaciones es útil la correlación cruzada?
 
-Para el análisis estadístico se utiliza el segmento completo correspondiente al intervalo de adquisición definido. De esta manera, los cálculos se realizan sobre una señal representativa del proceso experimental.
-
----
-
-### Cálculo de los estadísticos descriptivos
-
-Sobre la señal adquirida se calculan los principales parámetros estadísticos descriptivos:
-
-* **Media**: representa el valor promedio de la señal.
-* **Desviación estándar**: indica el grado de dispersión de los valores respecto a la media.
-* **Coeficiente de variación**: permite evaluar la variabilidad relativa de la señal.
-* **Asimetría (skewness)**: describe la inclinación de la distribución de los valores.
-* **Curtosis**: indica el grado de concentración o dispersión de los datos alrededor de la media.
-
-Estos parámetros permiten cuantificar el efecto del ruido y de las condiciones reales de adquisición sobre la señal fisiológica.
-
----
-
-### Histograma señal adquirida
-
-Finalmente, se genera un histograma de la señal adquirida para analizar la distribución de sus amplitudes. Este gráfico permite observar la dispersión de los datos y la posible presencia de valores atípicos asociados al ruido o a interferencias.
-
-Se incluye una línea vertical que representa la media, lo que facilita la interpretación visual de la distribución estadística.
-
-<p align="center">
-  <img src="img4.png" width="700">
-</p>
-
-<p align="center">
-  <em> Histograma de la señal adquirida </em>
-</p>
+Es una herramienta que es utilizada para analizar la relacion entre dos señales mediante aplicaciones como la detección de retrasos temporales en sistemas de comunicación, localización de fuentes sonoras y análisis bimédica; el reconocimiento de vox y detección de señales en entornos ruidosos; y el procesamiento de señales biomédicas coo ECG, EMG para comparar patrones y detectar similitudes entre registros.
 
 ---
 ### Parte C 
 
-En esta parte del trabajo se desarrolla el cálculo de la relación señal-ruido ( SNR) como una herramienta cuantitativa para evaluar la calidad de una señal fisiológica cuando es afectada por diferentes tipos de ruido.
+En esta sección se trabja con una señal adquirida por el generador de señales biologicas. Donde se analizan sus características tanto del tiempo como el dominio de la frecuencia.
 
-El procedimiento consiste en tomar la señal fisiológica de la parte B y generar versiones contaminadas artificialmente mediante la adición de distintos tipos de ruido. A partir de estas señales, se calcula la SNR con el fin de disponer de un parámetro numérico que describa la relación entre la potencia de la señal útil y la potencia del ruido añadido.
+Para esto. primero se determina la frecuencia de Nyquist de la señal generada, posteriormente se digitaliza utilizando un frecuencia de muestreo afecuada y se analizan diferentes parámetros estadísticos y espectrales de la señal.
 
+---
+
+### Frecuencia de Nyquist
+La frecuencia de Nyquist corresponde a la mitad de la frecuencia de muestreo y representa la máxima frecuencia que puede representarse correctamente sin que ocurra aliasing.
+
+En esta practica se utilizó una frecuencia de muestreo equivalente a cuatro veces la frecuencia de Nyquist, lo que garantiza que la señal pueda digitalizarse adecuadamente y evita problemas de aliasing.
 ```python
-def calcular_snr(senal, ruido):
-    potencia_senal = np.mean(senal**2)
-    potencia_ruido = np.mean(ruido**2)
-    snr = 10 * np.log10(potencia_senal / potencia_ruido)
-    return snr
+nyquist=fs/2
+print("Frecuencia de Nyquist: ",nyquist, "Hz")
+frecuencian= 4*nyquist
+print("Frecuencia digitalizada: ",frecuencian, "Hz")
+factor = int(frecuencian / fs)
+if factor< 1:
+    factor= 1
+
 
 ```
 
+---
+
+### Digitalización de la señal
+La señal biológica generada fue adquirida mediante el microcontrolador DAQ y convertida en una señal digital mediante un proceso de muestreo.
+
+Durante este proceso:
+
+1. La señal analógica es capturada por el sistema DAQ.
+
+2. Se toman muestras en intervalos definidos por el período de muestreo.
+
+3. Estas muestras se almacenan como valores discretos que representan la señal digital.
+
+Este proceso permite que la señal pueda ser procesada posteriormente utilizando herramientas computacionales como Python.
+
+Una vez digitalizada la señal, se calcularon diferentes estadísticos descriptivos para analizar su comportamiento en el dominio del tiempo.
+
+Media
+
+La media representa el valor promedio de la señal, este valor permite identificar si la señal presenta un desplazamiento respecto a cero o si está centrada alrededor del eje horizontal.
+
+Mediana
+
+La mediana corresponde al valor central de los datos cuando estos se ordenan de menor a mayor.
+
+Este estadístico es útil porque no se ve afectado por valores extremos o ruido presente en la señal.
+
+Desviación estándar
+
+La desviación estándar mide qué tanto se dispersan los valores de la señal alrededor de la media. Un valor alto de desviación estándar indica que la señal presenta mayor variabilidad o fluctuaciones.
+
+Valor máximo y mínimo
+
+Estos valores permiten identificar como amplitud máxima de la señal y amplitud mínima de la señal. Lo cual es importante para conocer el rango dinámico de la señal biológica.
+
+```python
+media = np.mean(senal)
+mediana = np.median(senal)
+desv = np.std(senal)
+maximo = np.max(senal)
+minimo = np.min(senal)
+
+```
 
 ---
 
-### Selección de la señal de referencia
+### Clasificación de la señal
 
-El código inicia con la selección de una señal fisiológica previamente cargada, la cual se considera como señal de referencia  en archivos .txt . Esta señal representa la información útil y se emplea como base para todos los cálculos posteriores. A partir de esta señal se obtiene la potencia asociada a la señal original, necesaria para el cálculo de la SNR.
+La señal EOG se clasifica como análogica en su origen, digitalizada para su procesamiento, aleatoria y aperiódica ya que, es análogica en origen porque el generador produce una tensión eléctrica continua variable en el timpo, pero al ser adquirida con la DAQ y muestreada a una frecuencia de 300 Hz, se convierte en una señal digital discreta; es aleatoia debido a su alta variabilidd en valores, la imposibilidad de predecir los movimientos oculares exactos simulados y la presencia de ruido fisiológico y de medición del sistema de adquisición, y por ultimo es aperiodica porque su frecuencia es continua, no presenta un perioso fundamental constante y los movimientos oculares ocurren en momentos aleatorios,sin seguir un patron.
+
+
+<p align="center">
+<img width="1018" height="429" alt="image" src="https://github.com/user-attachments/assets/dd764fcd-b49d-4c72-8f2d-b3838bb1722e" />
+
+</p>
+
+<p align="center">
+  <em>Señal EOG</em>
+</p
 
 ---
 
-### Generación de señales de ruido
+### Transformada de Fourier
 
-Posteriormente, el código genera diferentes tipos de ruido artificial con el propósito de simular condiciones reales de adquisición de señales biomédicas. Entre los ruidos generados se incluyen:
+La FFT permite descomponer la señal en las diferentes frecuencias que la componen.
 
-* **Ruido blanco gaussiano**, caracterizado por una distribución normal y utilizado comúnmente para modelar ruido electrónico.
-* **Ruido impulsivo**, que simula interferencias repentinas y de corta duración.
-* **Ruido de baja frecuencia**, asociado a variaciones lentas o desplazamientos de la línea base.
+El resultado de la FFT muestra qué frecuencias están presentes en la señal y con qué intensidad.
 
-Cada señal de ruido se genera de forma independiente y con parámetros ajustables, lo que permite controlar su influencia sobre la señal fisiológica.
+En la gráfica obtenida se observa la magnitud del espectro de frecuencias, lo que permite identificar los componentes dominantes de la señal.
+
 
 <p align="center">
-  <img src="img5.png" width="700">
+<img width="1003" height="427" alt="image" src="https://github.com/user-attachments/assets/21d81451-fb71-4d63-a956-ebebefc08ebf" />
+
+</p>
+
 <p align="center">
-  <em>Ruido gaussiano</em>
+  <em>Transformada Fourier</em>
+</p
 
 ---
 
-### Contaminación de la señal fisiológica
-
-Una vez generadas las señales de ruido, estas se suman a la señal fisiológica original. Este proceso da como resultado señales contaminadas que conservan la información original, pero incorporan perturbaciones artificiales. La finalidad de este procedimiento es disponer de diferentes versiones de la señal bajo condiciones controladas de ruido.
-<p align="center">
-  <img src="img6.png" width="700">
-<p align="center">
-  <em>Ruido impulso</em>
+### Densidad espectral de potencia (PSD)
+La densidad espectral de potencia describe cómo se distribuye la potencia de la señal a lo largo de las diferentes frecuencias. La PSD permite identificar en qué frecuencias se concentra la mayor energía de la señal, lo cual es muy útil en el análisis de señales biológicas.
 
 ---
 
-### Cálculo de la relación señal-ruido (SNR)
+### Estadísticos en el dominio de la frecuencia
 
-Para cada señal contaminada, el código calcula la relación señal-ruido utilizando la potencia de la señal de referencia y la potencia del ruido añadido. La SNR se expresa en decibelios (dB), lo que permite representar la relación entre señal y ruido en una escala logarítmica.
+Además del análisis espectral, se calcularon algunos estadísticos sobre las frecuencias obtenidas.
 
-Este cálculo se realiza de manera sistemática para cada tipo de ruido generado.
+Frecuencia media
 
----
+Representa el valor promedio de las frecuencias presentes en el espectro.
 
-### Visualización de las señales
+Frecuencia mediana
 
-Finalmente, el código genera gráficas que muestran la señal fisiológica original junto con las señales contaminadas. Estas visualizaciones permiten verificar de forma gráfica el efecto del ruido añadido sobre la señal, así como comprobar el correcto funcionamiento del proceso de contaminación y del cálculo de la SNR.
+Corresponde al valor central dentro del conjunto de frecuencias analizadas.
+
+Desviación estándar de las frecuencias
+
+Mide la dispersión de las frecuencias alrededor del promedio.
+
+Esto permite analizar qué tan concentradas o dispersas están las componentes espectrales.
+
+```python
+print("\nEstadísticos en el dominio de la frecuencia:")
+freq_media = np.sum(frecuencias * magnitud) / np.sum(magnitud)
+magnitud_acum = np.cumsum(magnitud) / np.sum(magnitud)
+freq_mediana = frecuencias[np.where(magnitud_acum >= 0.5)[0][0]]
+freq_std = np.sqrt(np.sum(((frecuencias - freq_media)**2) * magnitud) / np.sum(magnitud))
+
+```
+
+Histograma de frecuencias
+
+El histograma permite visualizar cómo se distribuyen las frecuencias presentes en la señal.
+
+Cada barra representa la cantidad de frecuencias dentro de un intervalo determinado.
+
+Este tipo de representación es útil para identificar zonas del espectro donde se concentra mayor cantidad de componentes frecuenciales.
+
 <p align="center">
-  <img src="img7.png" width="700">
+<img width="1003" height="423" alt="image" src="https://github.com/user-attachments/assets/dfc3ec7b-ad21-4d21-915f-2d8bcf921d6c" />
+
+
+</p>
+
 <p align="center">
-  <em>Ruido tipo artefacto</em>
+  <em>Histograma de frecuencias</em>
+</p
+
 
   ---
   
 
 ### Analisis de resultados y preguntas 
 
-Los valores estadísticos calculados sobre la señal sintética no son exactamente iguales a los obtenidos a partir de la señal real, debido a diferencias tanto en el offset como en la naturaleza de cada señal. La señal sintética presentaba un offset aproximado de −0,4, mientras que la señal real tenía un offset cercano a −0,2, lo cual explica directamente la diferencia en la media, ya que este parámetro refleja el desplazamiento vertical de la señal. Además, la desviación estándar muestra que la señal sintética tiene mayor dispersión que la real, lo que indica una variabilidad distinta en sus amplitudes. Las diferencias más notables se observan en la asimetría y la curtosis, parámetros que dependen fuertemente de la forma de la distribución de los datos; al ser la señal sintética generada artificialmente y posiblemente contaminada con ruido específico, puede presentar picos más pronunciados o una distribución más sesgada en comparación con la señal real, que contiene variaciones fisiológicas propias del sistema cardiovascular.
+En el laboratorio se exploraron diferentes herramientas con el objetivo de comprender su comportamiento en el tiempo y la frecuencia. A partir de la convoluvión de dos secuencias discretas se pudo observar cómo la interacción entre una señal de entrada y la respuesta de un sistema genera una nueva señal, lo que resultó veridico al comparar el cálculo manual con el obtenido mediante herramientas computacionales. 
 
-En términos generales, el análisis estadístico completo evidencia que, aunque ambas señales representan un ECG, su comportamiento cuantitativo no es idéntico. La comparación de media, desviación estándar, asimetría y curtosis permite identificar diferencias en el desplazamiento, la variabilidad y la forma de la distribución de amplitudes, lo que confirma que las condiciones de generación o adquisición influyen directamente en las características estadísticas de la señal. La señal real, al provenir de un proceso fisiológico y de un sistema de adquisición físico, incorpora variaciones naturales y posibles interferencias del entorno, mientras que la señal sintética depende del modelo matemático y de los parámetros utilizados para su construcción.
+Se abordó la correlación cruzada entre dos señales sinusoidales desfasada, lo que permitió cuantificar su similitud en función del desplazamiento relativo. Los resultados reflejaron que, debido a la diferencia de fase de 90 grados entre el seno y el coseno, la máxima correlación no se alcanza en el desplazamiento cero, sino en aquellos puntos donde las señales se alinean mejor. Es importante la diferencia conceptual entre correlación cruzada y convolución: mientras que la convolución implica una inversión temporal de una de las señales y se utiliza para describir la salida de sistemas lineales, la correlación cruzada mide la similitud sin inversión; la convolución se usa para aplicar filtros a las imágenes, por ejemplo para suavizar la imagen o resaltar los bordes. Por otro lado, la correlación cruzada se utiliza para comparar una imagen con un patrón conocido y así encontrar regiones que se parezcan a ese patrón.
 
-Por otra parte, el tipo de ruido sí afecta el valor de la SNR calculado, ya que esta relación depende de la potencia del ruido añadido respecto a la potencia de la señal útil. Un ruido blanco gaussiano distribuye su energía de manera uniforme en el espectro, el ruido impulsivo introduce picos de alta amplitud que incrementan considerablemente la potencia del ruido, y el ruido de baja frecuencia altera la línea base de la señal; cada uno modifica la potencia total del componente no deseado de forma distinta, generando variaciones en la SNR. En consecuencia, la SNR no solo cuantifica la calidad de la señal, sino que también refleja cómo diferentes tipos de contaminación pueden afectar la interpretación clínica y la confiabilidad del análisis biomédico.
+La Transformada Rápida de Fourier, aplicada a una señal de electrooculografía adquirida con un sistema de adquisición de datos. El análisis frecuencial permitió descomponer la señal en sus componentes espectrales y visualizar cómo se distribuye su energía a través de la densidad espectral de potencia. Complementariamente, se calcularon estadísticos en frecuencia como la frecuencia media, la mediana y la desviación estándar, que aportaron una caracterización cuantitativa del contenido espectral. Este enfoque resultó clave para identificar las frecuencias predominantes en la señal biomédica y para comprender su comportamiento oscilatorio. La transformada de Fourier ofrece un conjunto de características con mayor poder discriminativo que el dominio temporal en contextos donde la información relevante reside en la composición frecuencial, ya que permite distinguir patrones espectrales que no son evidentes en la evolución temporal de la señal.
 
----
-### Alcance de los parámetros estadísticos en la detección de patologías
+Tanto la convolución como la correlación son importantes en el procesamiento digital por su capacidad para modelar sistemas lineales y medir similitudes entre señales. Sin embargo, su aplicación en entornos reales enfrenta desafíos derivados de la naturaleza no estacionaria y no lineal de las bioseñales, así como de la presencia inevitable de ruido y artefactos, que pueden distorsionar los resultados y exigir técnicas de preprocesamiento adicionales. 
 
-Los parámetros estadísticos descriptivos permiten caracterizar globalmente una señal biomédica sin depender de la identificación de puntos fiduciales específicos, como el pico R en el ECG. Esto representa una ventaja en situaciones donde la señal está contaminada o cuando la detección automática de eventos presenta errores.
-
-En el contexto clínico, parámetros como la desviación estándar, la asimetría y la curtosis pueden reflejar alteraciones en la morfología del ECG asociadas a cambios fisiológicos o patológicos. Por ejemplo, una mayor variabilidad podría relacionarse con arritmias, mientras que cambios en la curtosis podrían indicar presencia de picos anómalos o complejos ventriculares prematuros.
-
-Sin embargo, estos parámetros no permiten identificar directamente el tipo de patología, ya que describen propiedades globales de la señal y no eventos específicos del ciclo cardíaco. Por tanto, su utilidad clínica es principalmente complementaria y no diagnóstica por sí sola.
+La Transformada de Fourier ofrece una ventaja al contenido frecuencial de las señales, pero su uso en aplicaciones de tiempo real se ve condicionado por la necesidad de procesar bloques completos de datos, lo que produce retrasos y dificulta el seguimiento de cambios rápidos en la señal. La pérdida de información temporal inherente a la transformada global y los artefactos de borde derivados del enventanado son aspectos que deben gestionarse cuidadosamente, especialmente en entornos clínicos donde la respuesta inmediata es crítica. A pesar de estas limitaciones, la combinación de estas herramientas con técnicas como la transformada de Fourier de tiempo corto o filtros adaptativos permite extender su utilidad, logrando un equilibrio entre resolución espectral y capacidad de respuesta temporal.
 
 ---
-### Limitaciones en la detección de patologías
 
-El uso exclusivo de parámetros estadísticos presenta varias limitaciones:
-
-- No distingue entre cambios fisiológicos normales y alteraciones patológicas.
-
-- Es altamente dependiente de la ventana temporal seleccionada.
-
-- Puede verse afectado por ruido y artefactos.
-
-- No considera la información morfológica detallada del ECG.
-
-- Existe alta variabilidad interindividual, lo que dificulta establecer valores umbral universales.
-
-Por lo tanto, aunque los estadísticos descriptivos aportan información cuantitativa relevante, deben complementarse con análisis temporal, espectral o clínico para una interpretación diagnóstica adecuada.
-
----
-### Alcance y limitaciones para evaluar calidad de señal
-
-La relación señal-ruido (SNR) es una herramienta útil para cuantificar objetivamente la calidad de una señal biomédica. Una mayor SNR indica que la potencia de la señal útil es significativamente superior a la del ruido, lo cual facilita el análisis automático y clínico.
-
-No obstante, una SNR elevada no garantiza necesariamente que la señal sea clínicamente interpretable, ya que ciertos tipos de ruido, como el impulsivo, pueden alterar la morfología del ECG aun cuando su potencia promedio no sea dominante.
-
-Además, la SNR no distingue entre tipos de contaminación ni identifica si el ruido afecta regiones críticas de la señal, como el complejo QRS o el segmento ST. Por ello, la evaluación de calidad debe considerar tanto métricas cuantitativas como inspección visual y análisis contextual.
 
 ---
 ### Conclusiones
 
-- Se logró caracterizar estadísticamente señales fisiológicas reales y sintéticas mediante el cálculo de parámetros descriptivos como media, desviación estándar, coeficiente de variación, asimetría y curtosis.
-
-- Se evidenció que las condiciones de adquisición influyen directamente en los valores estadísticos obtenidos, mostrando diferencias entre una señal descargada desde una base de datos y una señal adquirida experimentalmente.
-
-- Se comprobó que el tipo de ruido añadido afecta significativamente la relación señal-ruido (SNR), demostrando que distintos mecanismos de contaminación impactan de forma diferente la potencia del componente no deseado.
-
-- Aunque los parámetros estadísticos permiten describir globalmente una señal biomédica y evaluar su calidad, su uso aislado no es suficiente para establecer diagnósticos clínicos, ya que no capturan completamente la información morfológica y fisiológica del ECG.
-
-- Las técnicas aplicadas en esta práctica constituyen una base fundamental para el procesamiento digital de señales biomédicas y resaltan la importancia de integrar análisis estadístico, conocimiento fisiológico y evaluación experimental para una interpretación adecuada.
-
+- La convolución permitió verificar experimentalmente la respuesta de un sistema discreto, confirmando que la señal obenida mediante el calculo manual coincide con la generada a través de Python. esto valida la implementación computaciomal de la convolución como herramienta para modelar sistemas nvariantes en el tiempo.
+- La correlación cruzada demostró ser eficaz para cuantificar la similitud entre señales en función del desplazamiento temporal, evidenciado en el análisis del seno y coseno desfasados 90°, donde el máximo de correlación no ocurre en el desplazamiento cero sino cuando ambas señales se alinean mejor.
+- El análisis en tiempo y frecuencia de la señal EOG permitió caracterizar su comportamiento estadístico y espectral, obteniendo parámetros descriptivos como media, mediana, desviación estándar, frecuencia media y densidad espectral de potencia. Estos indicadores proporcionan una visión integral de la señal, revelando que las señales biomédicas presentan una distribución de energía en un rango continuo de frecuencias y una variabilidad significativa, lo que confirma su naturaleza aleatoria y aperiódica.
+- La Transformada de Fourier demostró su utilidad para identificar el contenido frecuencial de la señal biomédica, permitiendo visualizar cómo se distribuye la energía en las diferentes bandas de frecuencia. Sin embargo, su aplicación en tiempo real presenta limitaciones importantes como la necesidad de trabajar con bloques completos de datos.
+- 
 ---
 ### Referencias 
-Elgendi, M. (2016). Optimal signal quality index for photoplethysmogram signals. Bioengineering, 3(4), 21. https://doi.org/10.3390/bioengineering3040021
+ A. V. Oppenheim, A. S. Willsky y S. H. Nawab, Signals and systems. Upper
+Saddle River, NJ, USA: Pearson Educación, 1997.
 
-Goldberger, A. L., Amaral, L. A. N., Glass, L., Hausdorff, J. M., Ivanov, P. C., Mark, R. G., Mietus, J. E., Moody, G. B., Peng, C. K., & Stanley, H. E. (2000). PhysioBank, PhysioToolkit, and PhysioNet: Components of a new research resource for complex physiologic signals. Circulation, 101(23), e215–e220. https://doi.org/10.1161/01.CIR.101.23.e215
+S. K. Jena, “Convolution, cross-correlation, and stochastic analysis,” en
+Fourier, Laplace, and the Tangled Love Affair with Transforms: The Art of
+Signal Synthesis and Analysis, Cham, Switzerland: Springer Nature
+Switzerland, 2025, pp. 275-363. https://doi.org/10.1007/978-3-031-80165-
+5_8.
 
-Moody, G. B., & Mark, R. G. (2001). The impact of the MIT-BIH arrhythmia database. IEEE Engineering in Medicine and Biology Magazine, 20(3), 45–50. https://doi.org/10.1109/51.932724
+W. T. Rhodes, “Acousto-optic signal processing: convolution and
+correlation,” Proceedings of the IEEE, vol. 69, no. 1, pp. 65-79, 2005.
+https://doi.org/10.1109/JPROC.1981.11946.
+Z. He, Y. Fan, J. Zhuang, Y. Dong y H. Bai, “Correlation filters with weighted
+convolution responses,” en Proceedings of the IEEE International
+Conference on Computer Vision Workshops, Venice, Italy, 22-29 Oct. 2017,
+pp. 1992-2000. https://doi.org/10.1109/ICCVW.2017.234. 
 
-Oppenheim, A. V., Willsky, A. S., & Nawab, S. H. (1997). Signals and systems (2nd ed.). Prentice Hall.
-
-Proakis, J. G., & Manolakis, D. G. (2007). Digital signal processing: Principles, algorithms, and applications (4th ed.). Pearson Prentice Hall.
-
-Rangayyan, R. M. (2002). Biomedical signal analysis: A case-study approach. Wiley-IEEE Press.
 
 Sörnmo, L., & Laguna, P. (2005). Bioelectrical signal processing in cardiac and neurological applications. Elsevier Academic Press.
